@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotelituss - Tu hotel de lujo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    Hotelituss
+                </a>
+                
+                <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                        <li><a href="#habitaciones" class="nav-link">Habitaciones</a></li>
+                        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                        <li><a href="#reservar" class="nav-link btn-reserva">Reservar Ahora</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="animate-fade">Bienvenido a Hotelituss</h1>
+                <p class="hero-subtitle animate-fade">Experimenta el lujo y la comodidad en cada detalle</p>
+                <a href="#reservar" class="btn btn-hero animate-fade">Descubre Nuestras Habitaciones</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="reservar" class="booking">
+        <div class="container">
+            <form class="booking-form">
+                <div class="booking-grid">
+                    <div class="form-group">
+                        <label for="check-in">Llegada</label>
+                        <input type="date" id="check-in" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="check-out">Salida</label>
+                        <input type="date" id="check-out" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guests">Huéspedes</label>
+                        <select id="guests" class="form-control" required>
+                            <option value="1">1 Persona</option>
+                            <option value="2">2 Personas</option>
+                            <option value="3">3 Personas</option>
+                            <option value="4">4 Personas</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i>
+                        Buscar Disponibilidad
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section id="habitaciones" class="rooms">
+        <div class="container">
+            <header class="section-header">
+                <h2>Nuestras Habitaciones</h2>
+                <p>Descubre el confort en cada espacio</p>
+            </header>
+
+            <div class="rooms-grid">
+                <!-- Room Card 1 -->
+                <article class="room-card">
+                    <div class="room-image">
+                        <img src="https://hinncordoba.com.ar/wp-content/uploads/2021/09/Suite.jpg" alt="Suite Standard">
+                        <span class="room-tag">Desde $100/noche</span>
+                    </div>
+                    <div class="room-content">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Suite Standard</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 2 Personas</span>
+                            <span><i class="fas fa-expand"></i> 30m²</span>
+                            <span><i class="fas fa-bed"></i> 1 Cama King</span>
+                        </div>
+                        <div class="room-amenities">
+                            <span><i class="fas fa-wifi"></i> WiFi</span>
+                            <span><i class="fas fa-shower"></i> Ducha</span>
+                            <span><i class="fas fa-tv"></i> TV HD</span>
+                        </div>
+                        <a href="#" class="btn btn-reserve">Reservar Ahora</a>
+                    </div>
+                </article>
+
+                <!-- Room Card 2 -->
+                <article class="room-card">
+                    <div class="room-image">
+                        <img src="https://www.palladiohotelbuenosaires.com/wp-content/uploads/sites/7/2021/11/palladio_hotel_mgallery_deluxe_suite_2_bed_slide_01-2200x1200.jpg" alt="Suite Deluxe">
+                        <span class="room-tag">Desde $150/noche</span>
+                    </div>
+                    <div class="room-content">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Suite Deluxe</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 3 Personas</span>
+                            <span><i class="fas fa-expand"></i> 45m²</span>
+                            <span><i class="fas fa-bed"></i> 1 King + 1 Simple</span>
+                        </div>
+                        <div class="room-amenities">
+                            <span><i class="fas fa-wifi"></i> WiFi</span>
+                            <span><i class="fas fa-bath"></i> Jacuzzi</span>
+                            <span><i class="fas fa-tv"></i> TV HD</span>
+                            <span><i class="fas fa-coffee"></i> Minibar</span>
+                        </div>
+                        <a href="#" class="btn btn-reserve">Reservar Ahora</a>
+                    </div>
+                </article>
+
+                <!-- Room Card 3 -->
+                <article class="room-card">
+                    <div class="room-image">
+                        <img src="https://www.sofitelbarucalablanca.com/wp-content/uploads/sites/19/2023/04/DUF_7068-v-ok-1170x780.jpg" alt="Suite Presidencial">
+                        <span class="room-tag">Desde $200/noche</span>
+                    </div>
+                    <div class="room-content">
+                        <div class="room-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Suite Presidencial</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 4 Personas</span>
+                            <span><i class="fas fa-expand"></i> 60m²</span>
+                            <span><i class="fas fa-bed"></i> 2 Camas King</span>
+                        </div>
+                        <div class="room-amenities">
+                            <span><i class="fas fa-wifi"></i> WiFi</span>
+                            <span><i class="fas fa-bath"></i> Jacuzzi</span>
+                            <span><i class="fas fa-tv"></i> TV HD</span>
+                            <span><i class="fas fa-coffee"></i> Minibar</span>
+                            <span><i class="fas fa-concierge-bell"></i> Room Service 24/7</span>
+                        </div>
+                        <a href="#" class="btn btn-reserve">Reservar Ahora</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
