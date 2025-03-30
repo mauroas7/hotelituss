@@ -31,6 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar animación de contadores
     setupCounterAnimation();
+    
+    // Manejar navegación responsiva
+    handleResponsiveNav();
+    
+    // Detectar scroll para cambiar estilo de navbar
+    handleNavbarScroll();
 });
 
 /**
@@ -52,26 +58,36 @@ function initMap() {
     const hotelLatitude = -32.88789;
     const hotelLongitude = -68.855;
 
-    if (document.getElementById('map')) {
-        const map = L.map('map').setView([hotelLatitude, hotelLongitude], 15);
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        try {
+            const map = L.map('map').setView([hotelLatitude, hotelLongitude], 15);
 
-        // Agregar capa de OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+            // Agregar capa de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
-        // Agregar un marcador para el hotel
-        const hotelIcon = L.icon({
-            iconUrl: 'https://cdn.mapmarker.io/api/v1/pin?size=50&background=%23c8a97e&icon=fa-hotel&color=%23FFFFFF',
-            iconSize: [50, 50],
-            iconAnchor: [25, 50],
-            popupAnchor: [0, -50]
-        });
+            // Agregar un marcador para el hotel
+            const hotelIcon = L.icon({
+                iconUrl: 'https://cdn.mapmarker.io/api/v1/pin?size=50&background=%23c8a97e&icon=fa-hotel&color=%23FFFFFF',
+                iconSize: [50, 50],
+                iconAnchor: [25, 50],
+                popupAnchor: [0, -50]
+            });
 
-        L.marker([hotelLatitude, hotelLongitude], { icon: hotelIcon })
-            .addTo(map)
-            .bindPopup('<strong>Hotelituss</strong><br>Avenida Emilio Civit 367<br>Mendoza, Argentina')
-            .openPopup();
+            L.marker([hotelLatitude, hotelLongitude], { icon: hotelIcon })
+                .addTo(map)
+                .bindPopup('<strong>Hotelituss</strong><br>Avenida Emilio Civit 367<br>Mendoza, Argentina')
+                .openPopup();
+                
+            // Forzar actualización del mapa después de que se cargue completamente
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 500);
+        } catch (error) {
+            console.error('Error al inicializar el mapa:', error);
+        }
     }
 }
 
@@ -100,8 +116,11 @@ function setupDarkMode() {
         // Verificar preferencia de modo oscuro guardada
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
-            darkModeToggle.querySelector('i').classList.remove('fa-moon');
-            darkModeToggle.querySelector('i').classList.add('fa-sun');
+            const icon = darkModeToggle.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
         }
     }
 }
@@ -138,9 +157,10 @@ function setupBackToTop() {
 function setupSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            if (this.getAttribute('href') !== '#' && document.querySelector(this.getAttribute('href'))) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && document.querySelector(href)) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                document.querySelector(href).scrollIntoView({
                     behavior: 'smooth'
                 });
             }
@@ -157,8 +177,11 @@ function setupModals() {
     if (createUserLink) {
         createUserLink.addEventListener('click', function(e) {
             e.preventDefault();
-            var myModal = new bootstrap.Modal(document.getElementById('createUserModal'));
-            myModal.show();
+            const createUserModal = document.getElementById('createUserModal');
+            if (createUserModal) {
+                const modal = new bootstrap.Modal(createUserModal);
+                modal.show();
+            }
         });
     }
 
@@ -167,8 +190,11 @@ function setupModals() {
     if (loginLink) {
         loginLink.addEventListener('click', function(e) {
             e.preventDefault();
-            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-            loginModal.show();
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                const modal = new bootstrap.Modal(loginModal);
+                modal.show();
+            }
         });
     }
 
@@ -177,12 +203,20 @@ function setupModals() {
     if (switchToCreateUser) {
         switchToCreateUser.addEventListener('click', function(e) {
             e.preventDefault();
-            var loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
-            loginModal.hide();
-            setTimeout(function() {
-                var createUserModal = new bootstrap.Modal(document.getElementById('createUserModal'));
-                createUserModal.show();
-            }, 500);
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                const bsLoginModal = bootstrap.Modal.getInstance(loginModal);
+                if (bsLoginModal) {
+                    bsLoginModal.hide();
+                    setTimeout(function() {
+                        const createUserModal = document.getElementById('createUserModal');
+                        if (createUserModal) {
+                            const modal = new bootstrap.Modal(createUserModal);
+                            modal.show();
+                        }
+                    }, 500);
+                }
+            }
         });
     }
 
@@ -191,12 +225,20 @@ function setupModals() {
     if (switchToLogin) {
         switchToLogin.addEventListener('click', function(e) {
             e.preventDefault();
-            var createUserModal = bootstrap.Modal.getInstance(document.getElementById('createUserModal'));
-            createUserModal.hide();
-            setTimeout(function() {
-                var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-                loginModal.show();
-            }, 500);
+            const createUserModal = document.getElementById('createUserModal');
+            if (createUserModal) {
+                const bsCreateUserModal = bootstrap.Modal.getInstance(createUserModal);
+                if (bsCreateUserModal) {
+                    bsCreateUserModal.hide();
+                    setTimeout(function() {
+                        const loginModal = document.getElementById('loginModal');
+                        if (loginModal) {
+                            const modal = new bootstrap.Modal(loginModal);
+                            modal.show();
+                        }
+                    }, 500);
+                }
+            }
         });
     }
 }
@@ -222,7 +264,13 @@ function setupFormValidation() {
  */
 function initTooltips() {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    if (tooltipTriggerList.length > 0) {
+        try {
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        } catch (error) {
+            console.error('Error al inicializar tooltips:', error);
+        }
+    }
 }
 
 /**
@@ -243,18 +291,31 @@ function setupCounterAnimation() {
     }
     
     // Iniciar animación cuando el elemento sea visible
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.target.classList.contains('years')) {
-                animateCounter(entry.target, parseInt(entry.target.textContent));
-                observer.unobserve(entry.target);
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.target.classList.contains('years')) {
+                    const targetValue = parseInt(entry.target.textContent) || 0;
+                    if (targetValue > 0) {
+                        animateCounter(entry.target, targetValue);
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        });
+        
+        document.querySelectorAll('.years').forEach(el => {
+            observer.observe(el);
+        });
+    } else {
+        // Fallback para navegadores que no soportan IntersectionObserver
+        document.querySelectorAll('.years').forEach(el => {
+            const targetValue = parseInt(el.textContent) || 0;
+            if (targetValue > 0) {
+                animateCounter(el, targetValue);
             }
         });
-    });
-    
-    document.querySelectorAll('.years').forEach(el => {
-        observer.observe(el);
-    });
+    }
 }
 
 /**
@@ -269,7 +330,16 @@ function handleResponsiveNav() {
         document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth < 992) {
-                    bootstrap.Collapse.getInstance(navbarCollapse).hide();
+                    try {
+                        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                        if (bsCollapse) {
+                            bsCollapse.hide();
+                        }
+                    } catch (error) {
+                        console.error('Error al cerrar el menú móvil:', error);
+                        // Fallback manual si bootstrap no está disponible
+                        navbarCollapse.classList.remove('show');
+                    }
                 }
             });
         });
@@ -290,9 +360,10 @@ function handleNavbarScroll() {
                 navbar.classList.remove('scrolled');
             }
         });
+        
+        // Aplicar clase inicial según la posición actual
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        }
     }
 }
-
-// Llamar a funciones adicionales
-handleResponsiveNav();
-handleNavbarScroll();
