@@ -8,6 +8,8 @@
     --light-bg: #f5f0e8;
     --medium-bg: #e8dfd0;
     --dark-bg: #d1c3a9;
+    --modal-bg: #f8e3c5; /* Nuevo color para el fondo de los modales */
+}
 }
 
 body {
@@ -359,6 +361,131 @@ footer a:hover {
 
 .dark-mode .modal-header {
     border-bottom-color: var(--primary-color);
+}
+
+.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* User Creation Modal Styles */
+.modal-content {
+  background-color: var(--modal-bg); /* Cambiado a fondo naranja */
+  color: var(--text-color);
+  border: 1px solid var(--primary-color);
+}
+
+.modal-header {
+  border-bottom-color: var(--primary-color);
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.modal-title {
+  color: white;
+}
+
+.form-label {
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.form-control {
+  background-color: white;
+  color: var(--text-color);
+  border-color: var(--accent-color);
+}
+
+.form-control:focus {
+  background-color: white;
+  color: var(--text-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(200, 169, 126, 0.25);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-create-user, .btn-login {
+    background-color: var(--primary-color);
+    color: #ffffff !important;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-create-user:hover, .btn-login:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .btn-create-user, .dark-mode .btn-login {
+    background-color: var(--accent-color);
+    color: var(--text-color) !important;
+}
+
+.dark-mode .btn-create-user:hover, .dark-mode .btn-login:hover {
+    background-color: var(--primary-color);
+    color: #ffffff !important;
+}
+
+/* Estilos para el modal de creación de usuario e inicio de sesión */
+.modal-footer {
+    border-top-color: var(--primary-color);
+    background-color: var(--accent-color);
+    padding: 1rem;
+}
+
+.modal-footer a {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.modal-footer a:hover {
+    color: var(--primary-color);
+    text-decoration: underline !important;
+}
+
+/* Estilos para modo oscuro */
+.dark-mode .modal-content {
+    background-color: #3a2e1f; /* Fondo naranja oscuro para modo oscuro */
+    border-color: var(--primary-color);
+}
+
+.dark-mode .modal-header {
+    background-color: #2a2118;
+    border-bottom-color: var(--primary-color);
+}
+
+.dark-mode .modal-footer {
+    background-color: #2a2118;
+    border-top-color: var(--primary-color);
+}
+
+.dark-mode .form-control {
+    background-color: #4a3c2a;
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.dark-mode .form-control:focus {
+    background-color: #5a4c3a;
+}
+
+.dark-mode .form-label {
+    color: #e0d0b8;
+}
+
+.dark-mode .modal-footer a {
+    color: #e0d0b8;
 }
 
 .dark-mode .btn-close {
