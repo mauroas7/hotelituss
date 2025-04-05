@@ -433,11 +433,4 @@ function handleNavbarScroll() {
         });
     }
 
-    // 🧪 Ejemplo de uso (comentado)
-    /*
-    createReserva({ nombre: 'Juan', habitacion: 101 });
-    getReservas();
-    updateReserva(1, 'Carlos');
-    deleteReserva(1);
-    */
 
