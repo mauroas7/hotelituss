@@ -367,3 +367,77 @@ function handleNavbarScroll() {
         }
     }
 }
+
+    // URL base del backend en Render
+    const backendBaseUrl = 'https://hotelitus.onrender.com';
+
+    // Función para crear una nueva reserva (POST)
+    function createReserva(data) {
+        fetch(`${backendBaseUrl}/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('✅ Reserva creada:', result);
+            alert('Reserva creada con éxito.');
+        })
+        .catch(error => {
+            console.error('❌ Error al crear la reserva:', error);
+            alert('Error al crear la reserva.');
+        });
+    }
+
+    // Función para obtener todas las reservas (GET)
+    function getReservas() {
+        fetch(`${backendBaseUrl}/select`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('📋 Reservas obtenidas:', data);
+            // TODO: mostrar los datos en una tabla o lista en el DOM
+        })
+        .catch(error => {
+            console.error('❌ Error al obtener reservas:', error);
+            alert('Error al obtener reservas.');
+        });
+    }
+
+    // Función para actualizar una reserva (GET con query params)
+    function updateReserva(id, nuevoNombre) {
+        fetch(`${backendBaseUrl}/update?id=${id}&nombre=${nuevoNombre}`)
+        .then(response => response.json())
+        .then(result => {
+            console.log('🔄 Reserva actualizada:', result);
+            alert('Reserva actualizada correctamente.');
+        })
+        .catch(error => {
+            console.error('❌ Error al actualizar reserva:', error);
+            alert('Error al actualizar la reserva.');
+        });
+    }
+
+    // Función para eliminar una reserva (GET con query param)
+    function deleteReserva(id) {
+        fetch(`${backendBaseUrl}/delete?id=${id}`)
+        .then(response => response.json())
+        .then(result => {
+            console.log('🗑️ Reserva eliminada:', result);
+            alert('Reserva eliminada correctamente.');
+        })
+        .catch(error => {
+            console.error('❌ Error al eliminar reserva:', error);
+            alert('Error al eliminar la reserva.');
+        });
+    }
+
+    // 🧪 Ejemplo de uso (comentado)
+    /*
+    createReserva({ nombre: 'Juan', habitacion: 101 });
+    getReservas();
+    updateReserva(1, 'Carlos');
+    deleteReserva(1);
+    */
+
