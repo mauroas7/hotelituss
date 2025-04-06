@@ -295,3 +295,14 @@ function updateReserva(id, nuevoNombre) {
   });
 </script>
 
+function mostrarBotonesSesion() {
+    document.getElementById('loginBtn').classList.add('d-none');
+    document.getElementById('createUserBtn').classList.add('d-none');
+    document.getElementById('logoutBtn').classList.remove('d-none');
+}
+
+function ocultarBotonesSesion() {
+    document.getElementById('loginBtn').classList.remove('d-none');
+    document.getElementById('createUserBtn').classList.remove('d-none');
+    document.getElementById('logoutBtn').classList.add('d-none');
+}
