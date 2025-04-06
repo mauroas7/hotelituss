@@ -446,3 +446,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+<script>
+  function logout() {
+    localStorage.removeItem('userLoggedIn');
+    window.location.reload();
+  }
+</script>
