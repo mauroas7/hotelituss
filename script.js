@@ -1,8 +1,3 @@
-/**
- * Hotelituss - JavaScript Principal
- * Este archivo contiene todas las funcionalidades JavaScript del sitio web Hotelituss
- */
-
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar AOS (Animate On Scroll)
@@ -433,4 +428,25 @@ function handleNavbarScroll() {
         });
     }
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Si se accede con ?logged=true en la URL, guardar sesión en localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const loggedIn = urlParams.get('logged');
 
+    if (loggedIn === 'true') {
+      localStorage.setItem('userLoggedIn', 'true');
+      // Limpiar la URL
+      window.history.replaceState({}, document.title, "/");
+    }
+
+    // Ocultar botones si el usuario está logueado
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      const loginBtn = document.getElementById('loginBtn');
+      const createUserBtn = document.getElementById('createUserBtn');
+
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (createUserBtn) createUserBtn.style.display = 'none';
+    }
+  });
+</script>
