@@ -266,28 +266,43 @@ function updateReserva(id, nuevoNombre) {
     const urlParams = new URLSearchParams(window.location.search);
     const loggedIn = urlParams.get('logged');
 
-    // Si viene desde el login exitoso
+    // Si se logueó correctamente (por ejemplo, login.html?logged=true)
     if (loggedIn === 'true') {
       localStorage.setItem('userLoggedIn', 'true');
-      // Limpiar la URL para que no quede ?logged=true visible
       window.history.replaceState({}, document.title, "/");
     }
 
-    // Obtener los elementos
+    // Obtener botones
     const loginBtn = document.getElementById('loginBtn');
     const createUserBtn = document.getElementById('createUserBtn');
     const logoutBtn = document.getElementById('logoutBtn');
+    const logoutLink = document.getElementById('logoutLink');
 
-    // Si el usuario está logueado, ocultar login y crear, mostrar logout
+    // Mostrar u ocultar botones según el estado de sesión
     if (localStorage.getItem('userLoggedIn') === 'true') {
       if (loginBtn) loginBtn.style.display = 'none';
       if (createUserBtn) createUserBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      if (logoutLink) logoutLink.style.display = 'inline-block';
+    } else {
+      if (logoutBtn) logoutBtn.style.display = 'none';
+      if (logoutLink) logoutLink.style.display = 'none';
+    }
+
+    // Acción de logout
+    if (logoutLink) {
+      logoutLink.addEventListener('click', function (e) {
+        e.preventDefault(); // Evita que navegue
+        logout();           // Llama a la función de logout
+      });
     }
   });
 
+  // Función de cerrar sesión
   function logout() {
     localStorage.removeItem('userLoggedIn');
-    window.location.reload(); // o podés redirigir con window.location.href = "/";
+    alert("Sesión cerrada con éxito");
+    window.location.href = "/"; // Redirige a la página principal
   }
 </script>
+
