@@ -1284,6 +1284,69 @@ hr {
         height: 200px;
     }
     
+/* Asegurar visibilidad del texto */
+body {
+    color: #333333;
+}
+
+/* Mejorar contraste en secciones específicas */
+#bienvenida, #habitaciones, #servicios, #galeria, 
+#reservas, #opiniones, #ubicacion, #contacto {
+    color: #333333;
+}
+
+/* Asegurar visibilidad en secciones con fondo oscuro */
+.hero-content h1, 
+.hero-content p, 
+.hero-content .btn-outline-light {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Mejorar visibilidad en footer */
+footer {
+    color: #e0e0e0;
+}
+
+footer h5 {
+    color: #ffffff;
+}
+
+footer .footer-links a, 
+footer .footer-contact li {
+    color: #cccccc;
+}
+
+/* Asegurar visibilidad en modo oscuro */
+.dark-mode {
+    --text-color: #f0f0f0;
+}
+
+.dark-mode .section-title,
+.dark-mode .section-subtitle,
+.dark-mode p,
+.dark-mode h1, .dark-mode h2, .dark-mode h3, 
+.dark-mode h4, .dark-mode h5, .dark-mode h6 {
+    color: var(--text-color);
+}
+
+/* Mejorar contraste en tarjetas en modo oscuro */
+.dark-mode .room-card, 
+.dark-mode .service-card, 
+.dark-mode .testimonial-card,
+.dark-mode .reservation-form, 
+.dark-mode .contact-form,
+.dark-mode .amenity-item,
+.dark-mode .reservation-feature,
+.dark-mode .contact-method {
+    color: var(--text-color);
+}
+
+/* Asegurar visibilidad de formularios en modo oscuro */
+.dark-mode .form-control::placeholder,
+.dark-mode .form-select {
+    color: #aaaaaa;
+}
     .map-container {
         height: 350px;
         margin-bottom: 30px;
