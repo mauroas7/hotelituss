@@ -447,8 +447,31 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loggedIn = urlParams.get('logged');
+
+    if (loggedIn === 'true') {
+      localStorage.setItem('userLoggedIn', 'true');
+      window.history.replaceState({}, document.title, "/");
+    }
+
+    const loginBtn = document.getElementById('loginLink');
+    const createUserBtn = document.getElementById('createUserLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (createUserBtn) createUserBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'block'; // <-- Esto muestra el botón
+    } else {
+      if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+  });
+
   function logout() {
     localStorage.removeItem('userLoggedIn');
-    window.location.reload();
+    location.reload();
   }
 </script>
+
