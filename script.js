@@ -41,58 +41,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar API de backend
     setupBackendAPI();
-    
-    // Ejecutar nuevamente después de un breve retraso para capturar elementos cargados dinámicamente
-    setTimeout(checkHiddenText, 1000);
 });
-
-// También ejecutar cuando se completen todas las imágenes y recursos
-window.addEventListener('load', checkHiddenText);
 
 /**
  * Verifica si hay elementos con texto oculto y los hace visibles
- * FUNCIÓN MEJORADA para resolver el problema de texto invisible
  */
 function checkHiddenText() {
-    console.log('Ejecutando checkHiddenText para corregir textos invisibles');
-    
-    // Seleccionar todos los elementos que pueden contener texto
-    const elements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, a, li, label, button, div');
-    
+    const elements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, a, li, label, button');
     elements.forEach(el => {
-        // Verificar si el elemento tiene contenido de texto
-        if (el.textContent && el.textContent.trim().length > 0) {
-            // Forzar visibilidad con !important para sobrescribir cualquier estilo
-            el.style.setProperty('color', 'inherit', 'important');
-            el.style.setProperty('visibility', 'visible', 'important');
-            el.style.setProperty('display', '', 'important');
-            el.style.setProperty('opacity', '1', 'important');
-            
-            // Asegurar que el texto sea visible contra cualquier fondo
-            if (window.getComputedStyle(el).color === 'rgba(0, 0, 0, 0)' || 
-                window.getComputedStyle(el).color === 'transparent') {
-                el.style.setProperty('color', '#000000', 'important');
-            }
+        // Verificar estilos inline
+        if (el.style.color === 'transparent' || 
+            el.style.visibility === 'hidden' || 
+            el.style.display === 'none' || 
+            el.style.opacity === '0') {
+            console.warn('Elemento con texto oculto (estilo inline):', el);
+            // Forzar visibilidad
+            el.style.color = '';
+            el.style.visibility = '';
+            el.style.display = '';
+            el.style.opacity = '';
         }
         
-        // También verificar elementos hijos
-        const childTextNodes = el.querySelectorAll('*');
-        childTextNodes.forEach(child => {
-            if (child.textContent && child.textContent.trim().length > 0) {
-                child.style.setProperty('color', 'inherit', 'important');
-                child.style.setProperty('visibility', 'visible', 'important');
-                child.style.setProperty('display', '', 'important');
-                child.style.setProperty('opacity', '1', 'important');
-                
-                if (window.getComputedStyle(child).color === 'rgba(0, 0, 0, 0)' || 
-                    window.getComputedStyle(child).color === 'transparent') {
-                    child.style.setProperty('color', '#000000', 'important');
-                }
-            }
-        });
+        // Verificar estilos computados
+        const styles = window.getComputedStyle(el);
+        if (styles.color === 'rgba(0, 0, 0, 0)' || 
+            styles.color === 'transparent' ||
+            styles.visibility === 'hidden' || 
+            styles.display === 'none' || 
+            styles.opacity === '0') {
+            console.warn('Elemento con texto oculto (estilo computado):', el);
+            // Forzar visibilidad con !important
+            el.setAttribute('style', 'color: inherit !important; visibility: visible !important; display: block !important; opacity: 1 !important');
+        }
     });
-    
-    console.log('Corrección de textos invisibles completada');
 }
 
 /**
@@ -555,47 +536,28 @@ function setupBackendAPI() {
     }
 }
 
-// Configurar el formulario de login
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
 
-            try {
-                const response = await fetch('https://hotelitus.onrender.com/sesion', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-                });
+  const response = await fetch('https://hotelitus.onrender.com/sesion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}
+  });
 
-                if (response.redirected) {
-                    // Redirecciona si las credenciales son correctas
-                    window.location.href = response.url;
-                } else {
-                    const errorText = await response.text();
-                    const errorElement = document.getElementById('loginError');
-                    if (errorElement) {
-                        errorElement.innerText = errorText;
-                        errorElement.style.display = 'block';
-                    } else {
-                        // Si no existe el elemento de error, crear uno
-                        const errorDiv = document.createElement('div');
-                        errorDiv.id = 'loginError';
-                        errorDiv.className = 'alert alert-danger mt-3';
-                        errorDiv.innerText = errorText;
-                        loginForm.appendChild(errorDiv);
-                    }
-                }
-            } catch (error) {
-                console.error('Error en el inicio de sesión:', error);
-                alert('Error al conectar con el servidor. Por favor, intente nuevamente más tarde.');
-            }
-        });
-    }
+  if (response.redirected) {
+    // Redirecciona si las credenciales son correctas
+    window.location.href = response.url;
+  } else {
+    const errorText = await response.text();
+    document.getElementById('loginError').innerText = errorText;
+    document.getElementById('loginError').style.display = 'block';
+  }
 });
+</script>
