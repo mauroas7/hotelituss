@@ -1336,15 +1336,3 @@ hr {
     }
 }
 
-/* Añade esto al final de tu archivo CSS */
-body, p, h1, h2, h3, h4, h5, h6, .section-title, .section-subtitle, 
-.card-title, .card-text, .testimonial-text, .testimonial-author {
-    color: var(--text-color) !important;
-}
-
-/* Para secciones con fondo oscuro */
-.hero-content h1, .hero-content p, 
-footer h5, footer p, footer a, 
-.dark-bg h1, .dark-bg h2, .dark-bg p {
-    color: #ffffff !important;
-}
