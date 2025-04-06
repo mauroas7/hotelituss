@@ -260,3 +260,34 @@ function updateReserva(id, nuevoNombre) {
         alert('Error al actualizar la reserva.');
     });
 }
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loggedIn = urlParams.get('logged');
+
+    // Si viene desde el login exitoso
+    if (loggedIn === 'true') {
+      localStorage.setItem('userLoggedIn', 'true');
+      // Limpiar la URL para que no quede ?logged=true visible
+      window.history.replaceState({}, document.title, "/");
+    }
+
+    // Obtener los elementos
+    const loginBtn = document.getElementById('loginBtn');
+    const createUserBtn = document.getElementById('createUserBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Si el usuario está logueado, ocultar login y crear, mostrar logout
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (createUserBtn) createUserBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    }
+  });
+
+  function logout() {
+    localStorage.removeItem('userLoggedIn');
+    window.location.reload(); // o podés redirigir con window.location.href = "/";
+  }
+</script>
