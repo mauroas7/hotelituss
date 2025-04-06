@@ -914,6 +914,7 @@ footer h5::after {
 }
 
 /* Botones flotantes */
+/* Modificar los estilos de los botones flotantes para asegurar que sean visibles */
 #backToTop,
 #darkModeToggle {
   width: 50px;
@@ -924,21 +925,56 @@ footer h5::after {
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--transition);
+  position: fixed;
   z-index: 999;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  bottom: 30px;
-  position: fixed;
+  transition: var(--transition);
+  /* Eliminar opacity: 0 y visibility: hidden para que sean visibles por defecto */
 }
 
 #backToTop {
   right: 30px;
+  bottom: 30px;
+  opacity: 0;
+  visibility: hidden;
 }
 
 #darkModeToggle {
-  right: 90px;
+  right: 30px;
+  bottom: 90px;
+  /* Asegurar que el botón de modo oscuro sea siempre visible */
+  opacity: 1;
+  visibility: visible;
+}
+
+#backToTop.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+#backToTop:hover,
+#darkModeToggle:hover {
+  background-color: var(--primary-color-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+#backToTop i,
+#darkModeToggle i {
+  font-size: 1.25rem;
+}
+
+/* Ajustar posición en dispositivos móviles */
+@media (max-width: 991.98px) {
+  #backToTop {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  #darkModeToggle {
+    right: 20px;
+    bottom: 80px;
+  }
 }
 
 #backToTop.show,
