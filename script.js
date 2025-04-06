@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     logoutLink.addEventListener("click", () => {
         localStorage.removeItem("isLoggedIn");
-        window.location.reload(); // refresca la página para reflejar el cambio
+        window.location.reload();
     });
 });
 </script>
