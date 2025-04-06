@@ -428,23 +428,6 @@ function handleNavbarScroll() {
         });
     }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const loggedIn = urlParams.get('logged');
-
-  if (loggedIn === 'true') {
-    localStorage.setItem('userLoggedIn', 'true');
-    window.history.replaceState({}, document.title, "/");
-  }
-
-  if (localStorage.getItem('userLoggedIn') === 'true') {
-    const loginBtn = document.getElementById('loginLink');
-    const createUserBtn = document.getElementById('createUserLink');
-
-    if (loginBtn) loginBtn.style.display = 'none';
-    if (createUserBtn) createUserBtn.style.display = 'none';
-  }
-});
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
