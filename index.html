@@ -56,6 +56,7 @@
                         <a class="nav-link btn btn-login" href="#" id="loginLink">
                             <i class="fas fa-user-circle me-1"></i>Iniciar sesión
                         </a>
+                        <p id="loginError" class="text-danger mt-2 text-center" style="display: none;"></p>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-create-user" href="#" id="createUserLink">
@@ -955,7 +956,7 @@
                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                  </div>
                  <div class="modal-body">
-                     <form id="loginForm" action="https://hotelitus.onrender.com/sesion" method="POST">
+                     <form id="loginForm">
                          <div class="mb-3">
                              <label for="loginEmail" class="form-label">Email</label>
                              <div class="input-group">
