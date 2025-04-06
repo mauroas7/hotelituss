@@ -445,10 +445,3 @@ document.addEventListener('DOMContentLoaded', function () {
     if (createUserBtn) createUserBtn.style.display = 'none';
   }
 });
-
-<script>
-  function logout() {
-    localStorage.removeItem('userLoggedIn');
-    window.location.reload();
-  }
-</script>
