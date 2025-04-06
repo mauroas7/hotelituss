@@ -260,3 +260,28 @@ function updateReserva(id, nuevoNombre) {
         alert('Error al actualizar la reserva.');
     });
 }
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    const loginLink = document.getElementById("loginLink");
+    const createUserLink = document.getElementById("createUserLink");
+    const logoutLink = document.getElementById("logoutLink");
+
+    if (isLoggedIn) {
+        loginLink.style.display = "none";
+        createUserLink.style.display = "none";
+        logoutLink.style.display = "inline-block";
+    } else {
+        loginLink.style.display = "inline-block";
+        createUserLink.style.display = "inline-block";
+        logoutLink.style.display = "none";
+    }
+
+    logoutLink.addEventListener("click", () => {
+        localStorage.removeItem("isLoggedIn");
+        window.location.reload(); // refresca la página para reflejar el cambio
+    });
+});
+</script>
