@@ -42,21 +42,12 @@
                 <li class="nav-item"><a class="nav-link" href="#reservas">Reservas</a></li>
                 <li class="nav-item"><a class="nav-link" href="#opiniones">Opiniones</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                        <i class="fas fa-user-circle me-1"></i>Iniciar sesión
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-create-user" href="#" data-bs-toggle="modal" data-bs-target="#createUserModal">
-                        <i class="fas fa-user-plus me-1"></i>Crear Usuario
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-create-user ms-2" href="#" id="logoutLink" style="display: none;">
-                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar sesión
-                    </a>
-                </li>
+<!-- Botones visibles cuando NO está logueado -->
+<button id="loginBtn" class="btn btn-outline-primary">Iniciar sesión</button>
+<button id="createUserBtn" class="btn btn-outline-success">Crear usuario</button>
+
+<!-- Botón visible SOLO cuando está logueado -->
+<button id="logoutBtn" class="btn btn-danger" style="display: none;">Cerrar sesión</button>
             </ul>
         </div>
     </div>
