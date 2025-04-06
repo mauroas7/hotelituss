@@ -535,3 +535,29 @@ function setupBackendAPI() {
         });
     }
 }
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  const response = await fetch('https://hotelitus.onrender.com/sesion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}
+  });
+
+  if (response.redirected) {
+    // Redirecciona si las credenciales son correctas
+    window.location.href = response.url;
+  } else {
+    const errorText = await response.text();
+    document.getElementById('loginError').innerText = errorText;
+    document.getElementById('loginError').style.display = 'block';
+  }
+});
+</script>
