@@ -77,16 +77,17 @@
     <!-- Hero Section -->
     <header id="inicio" class="hero">
         <div class="hero-overlay"></div>
+        <!-- Reemplazar las imágenes del carrusel con imágenes de mejor calidad -->
         <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="https://www.luxsphere.co/wp-content/uploads/One-Only-the-Palm-luxury-hotel-in-dubai-1-.jpg" class="d-block w-100" alt="Vista exterior de Hotelituss">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="d-block w-100" alt="Vista exterior de Hotelituss">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://dq5r178u4t83b.cloudfront.net/wp-content/uploads/sites/125/2020/06/15182916/Sofitel-Dubai-Wafi-Luxury-Room-Bedroom-Skyline-View-Image1_WEB.jpg" class="d-block w-100" alt="Habitación de lujo con vista panorámica">
+                    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="d-block w-100" alt="Habitación de lujo con vista panorámica">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://media.architecturaldigest.com/photos/55e79210cd709ad62e90102f/master/pass/dam-images-travel-2015-hotel-pools-best-hotel-pools-01.jpg" class="d-block w-100" alt="Piscina infinita con vista al mar">
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80" class="d-block w-100" alt="Piscina infinita con vista al mar">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -408,20 +409,20 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
-                    <form class="reservation-form" action="/reservar" method="POST">
+                    <form class="reservation-form">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="checkIn" class="form-label">Fecha de entrada</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                    <input type="date" class="form-control" id="checkIn" name="fecha_inicio" required>
+                                    <input type="date" class="form-control" id="checkIn" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="checkOut" class="form-label">Fecha de salida</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                    <input type="date" class="form-control" id="checkOut" name="fecha_fin" required>
+                                    <input type="date" class="form-control" id="checkOut" required>
                                 </div>
                             </div>
                         </div>
@@ -430,11 +431,11 @@
                                 <label for="roomType" class="form-label">Tipo de habitación</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-bed"></i></span>
-                                    <select class="form-select" id="roomType" name="habitacion_tipo" required>
+                                    <select class="form-select" id="roomType" required>
                                         <option value="">Seleccionar...</option>
-                                        <option value="1">Habitación Individual</option>
-                                        <option value="2">Habitación Doble</option>
-                                        <option value="3">Suite Ejecutiva</option>
+                                        <option value="individual">Habitación Individual</option>
+                                        <option value="doble">Habitación Doble</option>
+                                        <option value="suite">Suite Ejecutiva</option>
                                     </select>
                                 </div>
                             </div>
@@ -442,7 +443,7 @@
                                 <label for="guests" class="form-label">Número de huéspedes</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-user-friends"></i></span>
-                                    <input type="number" class="form-control" id="guests" name="huespedes" min="1" max="4" required>
+                                    <input type="number" class="form-control" id="guests" min="1" max="4" required>
                                 </div>
                             </div>
                         </div>
@@ -451,24 +452,27 @@
                                 <label for="name" class="form-label">Nombre completo</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                    <input type="text" class="form-control" id="name" name="nombre" required>
+                                    <input type="text" class="form-control" id="name" placeholder="Ingrese su nombre" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Correo electrónico</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control" id="email" name="correo" required>
+                                    <input type="email" class="form-control" id="email" placeholder="Ingrese su email" required>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="specialRequests" class="form-label">Solicitudes especiales</label>
-                            <textarea class="form-control" id="specialRequests" name="estado" rows="3"></textarea>
+                            <textarea class="form-control" id="specialRequests" rows="3" placeholder="Indique cualquier solicitud especial que pueda tener"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg w-100">
                             <i class="fas fa-calendar-check me-2"></i>Reservar ahora
                         </button>
+                        <div class="reservation-info mt-3">
+                            <small><i class="fas fa-info-circle me-1"></i> No se realizará ningún cargo hasta confirmar la reserva</small>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -802,12 +806,12 @@
     </footer>
 
     <!-- Botón de modo oscuro -->
-    <button id="darkModeToggle" class="btn position-fixed bottom-0 end-0 m-3" aria-label="Cambiar modo oscuro/claro">
+    <button id="darkModeToggle" class="btn position-fixed" aria-label="Cambiar modo oscuro/claro">
         <i class="fas fa-moon"></i>
     </button>
 
     <!-- Botón de volver arriba -->
-    <button id="backToTop" class="btn position-fixed bottom-0 end-0 m-3 me-5" aria-label="Volver arriba">
+    <button id="backToTop" class="btn position-fixed" aria-label="Volver arriba">
         <i class="fas fa-arrow-up"></i>
     </button>
 
@@ -877,7 +881,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="loginForm" action="https://hotelitus.onrender.com/sesion" method="POST">
-                    <form id="loginForm">
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email</label>
                             <div class="input-group">
