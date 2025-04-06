@@ -262,43 +262,33 @@ function updateReserva(id, nuevoNombre) {
 }
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const loggedIn = urlParams.get('logged');
 
-    // Si la URL contiene ?logged=true, guardar sesión y limpiar URL
+    // Si viene desde el login exitoso
     if (loggedIn === 'true') {
-        localStorage.setItem('userLoggedIn', 'true');
-        window.history.replaceState({}, document.title, window.location.pathname);
+      localStorage.setItem('userLoggedIn', 'true');
+      // Limpiar la URL para que no quede ?logged=true visible
+      window.history.replaceState({}, document.title, "/");
     }
 
-    // Obtener elementos
-    const loginLink = document.getElementById('loginLink');
-    const createUserLink = document.getElementById('createUserLink');
-    const logoutLink = document.getElementById('logoutLink');
+    // Obtener los elementos
+    const loginBtn = document.getElementById('loginBtn');
+    const createUserBtn = document.getElementById('createUserBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-
-    // Mostrar u ocultar elementos según estado de sesión
-    if (isLoggedIn) {
-        if (loginLink) loginLink.style.display = 'none';
-        if (createUserLink) createUserLink.style.display = 'none';
-        if (logoutLink) logoutLink.style.display = 'inline-block';
-    } else {
-        if (loginLink) loginLink.style.display = 'inline-block';
-        if (createUserLink) createUserLink.style.display = 'inline-block';
-        if (logoutLink) logoutLink.style.display = 'none';
+    // Si el usuario está logueado, ocultar login y crear, mostrar logout
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (createUserBtn) createUserBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
     }
+  });
 
-    // Acción de logout
-    if (logoutLink) {
-        logoutLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            localStorage.removeItem('userLoggedIn');
-            location.reload(); // Recargar para actualizar visibilidad
-        });
-    }
-});
+  function logout() {
+    localStorage.removeItem('userLoggedIn');
+    window.location.reload(); // o podés redirigir con window.location.href = "/";
+  }
 </script>
-
 
