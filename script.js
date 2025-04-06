@@ -361,7 +361,7 @@ function handleResponsiveNav() {
 }
 
 /**
- * Detecta cuando la navbar debe cambiar de estilo al hacer scroll
+ * Detecta cuando la navbar debe cambiar de estilo al hacer scroll y actualiza el enlace activo
  */
 function handleNavbarScroll() {
   const navbar = document.querySelector(".navbar")
@@ -373,12 +373,59 @@ function handleNavbarScroll() {
       } else {
         navbar.classList.remove("scrolled")
       }
+
+      // Actualizar el enlace activo basado en la posición de scroll
+      updateActiveNavLink()
     })
 
     // Aplicar clase inicial según la posición actual
     if (window.scrollY > 50) {
       navbar.classList.add("scrolled")
     }
+
+    // Inicializar el enlace activo
+    updateActiveNavLink()
+  }
+}
+
+/**
+ * Actualiza el enlace activo en la navegación basado en la posición de scroll
+ */
+function updateActiveNavLink() {
+  // Obtener todas las secciones
+  const sections = document.querySelectorAll("section[id], header[id]")
+  const navLinks = document.querySelectorAll(".navbar-nav .nav-link:not(.btn)")
+
+  // Determinar qué sección está actualmente visible
+  let currentSection = ""
+  const scrollPosition = window.scrollY + 200 // Offset para mejor detección
+
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop
+    const sectionHeight = section.offsetHeight
+
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      currentSection = section.getAttribute("id")
+    }
+  })
+
+  // Actualizar la clase activa en los enlaces de navegación
+  navLinks.forEach((link) => {
+    link.classList.remove("active")
+    const href = link.getAttribute("href")
+    if (href === `#${currentSection}`) {
+      link.classList.add("active")
+    }
+  })
+
+  // Si estamos al principio de la página, activar el enlace de inicio
+  if (window.scrollY < 100) {
+    navLinks.forEach((link) => {
+      link.classList.remove("active")
+      if (link.getAttribute("href") === "#inicio") {
+        link.classList.add("active")
+      }
+    })
   }
 }
 
