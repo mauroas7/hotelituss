@@ -1,9 +1,6 @@
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar si hay elementos con texto oculto
-    checkHiddenText();
-    
-    // Inicializar AOS (Animate On Scroll) con manejo de errores
+    // Inicializar AOS (Animate On Scroll)
     initAOS();
     
     // Inicializar el mapa si existe el elemento
@@ -35,74 +32,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Detectar scroll para cambiar estilo de navbar
     handleNavbarScroll();
-    
-    // Configurar funcionalidad de login/logout
-    setupLoginLogout();
-    
-    // Configurar API de backend
-    setupBackendAPI();
 });
-
-/**
- * Verifica si hay elementos con texto oculto y los hace visibles
- */
-function checkHiddenText() {
-    const elements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, a, li, label, button');
-    elements.forEach(el => {
-        // Verificar estilos inline
-        if (el.style.color === 'transparent' || 
-            el.style.visibility === 'hidden' || 
-            el.style.display === 'none' || 
-            el.style.opacity === '0') {
-            console.warn('Elemento con texto oculto (estilo inline):', el);
-            // Forzar visibilidad
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.display = '';
-            el.style.opacity = '';
-        }
-        
-        // Verificar estilos computados
-        const styles = window.getComputedStyle(el);
-        if (styles.color === 'rgba(0, 0, 0, 0)' || 
-            styles.color === 'transparent' ||
-            styles.visibility === 'hidden' || 
-            styles.display === 'none' || 
-            styles.opacity === '0') {
-            console.warn('Elemento con texto oculto (estilo computado):', el);
-            // Forzar visibilidad con !important
-            el.setAttribute('style', 'color: inherit !important; visibility: visible !important; display: block !important; opacity: 1 !important');
-        }
-    });
-}
 
 /**
  * Inicializa la biblioteca AOS para animaciones al hacer scroll
  */
 function initAOS() {
-    try {
-        if (typeof AOS !== 'undefined') {
-            AOS.init({
-                duration: 1000,
-                once: true,
-                offset: 100,
-                disable: 'mobile' // Desactivar en móviles si causa problemas
-            });
-            console.log('AOS inicializado correctamente');
-        } else {
-            console.warn('AOS no está definido. Verifica que la biblioteca esté cargada correctamente.');
-            // Desactivar atributos data-aos para evitar problemas
-            document.querySelectorAll('[data-aos]').forEach(el => {
-                el.removeAttribute('data-aos');
-            });
-        }
-    } catch (error) {
-        console.error('Error al inicializar AOS:', error);
-        // Desactivar animaciones si hay error
-        document.querySelectorAll('[data-aos]').forEach(el => {
-            el.removeAttribute('data-aos');
-        });
-    }
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
 }
 
 /**
@@ -142,10 +82,6 @@ function initMap() {
             }, 500);
         } catch (error) {
             console.error('Error al inicializar el mapa:', error);
-            // Mostrar mensaje de error en el mapa
-            if (mapElement) {
-                mapElement.innerHTML = '<div style="padding: 20px; text-align: center;">Error al cargar el mapa. Por favor, recargue la página.</div>';
-            }
         }
     }
 }
@@ -427,54 +363,11 @@ function handleNavbarScroll() {
     }
 }
 
-/**
- * Configura la funcionalidad de login/logout
- */
-function setupLoginLogout() {
-    const loginBtn = document.getElementById('loginLink');
-    const createUserBtn = document.getElementById('createUserLink');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // Detectar si viene de un login exitoso con ?logged=true
-    const urlParams = new URLSearchParams(window.location.search);
-    const loggedIn = urlParams.get('logged');
-
-    if (loggedIn === 'true') {
-        localStorage.setItem('userLoggedIn', 'true');
-        window.history.replaceState({}, document.title, "/"); // Limpiar la URL
-    }
-
-    // Mostrar u ocultar botones según estado
-    const isLogged = localStorage.getItem('userLoggedIn') === 'true';
-
-    if (isLogged) {
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (createUserBtn) createUserBtn.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'inline-block';
-    } else {
-        if (logoutBtn) logoutBtn.style.display = 'none';
-        if (loginBtn) loginBtn.style.display = 'inline-block';
-        if (createUserBtn) createUserBtn.style.display = 'inline-block';
-    }
-
-    // Función para cerrar sesión
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('userLoggedIn');
-            window.location.reload(); // Refresca la página
-        });
-    }
-}
-
-/**
- * Configura las funciones de API del backend
- */
-function setupBackendAPI() {
     // URL base del backend en Render
     const backendBaseUrl = 'https://hotelitus.onrender.com';
 
     // Función para crear una nueva reserva (POST)
-    window.createReserva = function(data) {
+    function createReserva(data) {
         fetch(`${backendBaseUrl}/create`, {
             method: 'POST',
             headers: {
@@ -494,7 +387,7 @@ function setupBackendAPI() {
     }
 
     // Función para obtener todas las reservas (GET)
-    window.getReservas = function() {
+    function getReservas() {
         fetch(`${backendBaseUrl}/select`)
         .then(response => response.json())
         .then(data => {
@@ -508,7 +401,7 @@ function setupBackendAPI() {
     }
 
     // Función para actualizar una reserva (GET con query params)
-    window.updateReserva = function(id, nuevoNombre) {
+    function updateReserva(id, nuevoNombre) {
         fetch(`${backendBaseUrl}/update?id=${id}&nombre=${nuevoNombre}`)
         .then(response => response.json())
         .then(result => {
@@ -522,7 +415,7 @@ function setupBackendAPI() {
     }
 
     // Función para eliminar una reserva (GET con query param)
-    window.deleteReserva = function(id) {
+    function deleteReserva(id) {
         fetch(`${backendBaseUrl}/delete?id=${id}`)
         .then(response => response.json())
         .then(result => {
@@ -534,4 +427,37 @@ function setupBackendAPI() {
             alert('Error al eliminar la reserva.');
         });
     }
-}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginBtn = document.getElementById('loginBtn');
+    const createUserBtn = document.getElementById('createUserBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Detectar si viene de un login exitoso con ?logged=true
+    const urlParams = new URLSearchParams(window.location.search);
+    const loggedIn = urlParams.get('logged');
+
+    if (loggedIn === 'true') {
+      localStorage.setItem('userLoggedIn', 'true');
+      window.history.replaceState({}, document.title, "/"); // Limpiar la URL
+    }
+
+    // Mostrar u ocultar botones según estado
+    const isLogged = localStorage.getItem('userLoggedIn') === 'true';
+
+    if (isLogged) {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (createUserBtn) createUserBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    } else {
+      if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+
+    // Función para cerrar sesión
+    logoutBtn?.addEventListener('click', () => {
+      localStorage.removeItem('userLoggedIn');
+      window.location.reload(); // Refresca la página
+    });
+  });
+</script>
