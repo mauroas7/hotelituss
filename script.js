@@ -565,55 +565,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-//logica para mostrar boton si el usuario esta logueado
+// Al cargar la página, mostrar botones según si hay sesión
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificamos si el usuario está logueado con localStorage
-    const userId = localStorage.getItem("userId"); // Asegurate de guardar esto en login
-    if (userId) {
-      document.getElementById("navReservas").classList.remove("d-none");
+    const verReservasBtn = document.getElementById("verReservasBtn");
+
+    const usuarioLogueado = localStorage.getItem("usuarioLogueado"); // Por ejemplo, guarda el correo
+    if (usuarioLogueado) {
+        verReservasBtn.style.display = "block";
     }
 
-    // Al hacer clic en "Mis reservas"
-    document.getElementById("btnReservas").addEventListener("click", async (e) => {
-      e.preventDefault(); // Evita navegación
+    verReservasBtn.addEventListener("click", async () => {
+        const correo = localStorage.getItem("usuarioLogueado");
 
-      // Traer las reservas del usuario logueado
-      const response = await fetch("/mis-reservas");
-      const reservas = await response.json();
+        try {
+            const response = await fetch("https://tu-backend/render/ver-reservas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ correo }) // usar el correo guardado para buscar sus reservas
+            });
 
-      // Crear tabla y mostrarla (podés colocarlo en una sección o modal si querés)
-      let tablaHTML = `
-        <div class="container mt-4">
-          <h4>Mis Reservas</h4>
-          <table class="table table-bordered table-striped">
+            const reservas = await response.json();
+            mostrarTablaReservas(reservas);
+        } catch (error) {
+            console.error("Error al obtener reservas:", error);
+        }
+    });
+});
+
+// Función para crear la tabla de reservas
+function mostrarTablaReservas(reservas) {
+    const contenedor = document.getElementById("tablaReservasContainer");
+    if (reservas.length === 0) {
+        contenedor.innerHTML = "<p>No hay reservas registradas.</p>";
+        return;
+    }
+
+    let tablaHTML = `
+        <table class="table table-bordered">
             <thead>
-              <tr>
-                <th>ID</th><th>Tipo</th><th>Inicio</th><th>Fin</th><th>Estado</th>
-              </tr>
+                <tr>
+                    <th>Habitación</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Estado</th>
+                </tr>
             </thead>
             <tbody>
-      `;
+    `;
 
-      reservas.forEach(r => {
+    reservas.forEach(reserva => {
         tablaHTML += `
-          <tr>
-            <td>${r.id}</td>
-            <td>${r.tipo}</td>
-            <td>${r.fecha_inicio}</td>
-            <td>${r.fecha_fin}</td>
-            <td>${r.estado}</td>
-          </tr>
+            <tr>
+                <td>${reserva.habitacion_id}</td>
+                <td>${reserva.fecha_inicio}</td>
+                <td>${reserva.fecha_fin}</td>
+                <td>${reserva.estado}</td>
+            </tr>
         `;
-      });
-
-      tablaHTML += `</tbody></table></div>`;
-      document.body.insertAdjacentHTML("beforeend", tablaHTML);
     });
-  });
 
-
-
+    tablaHTML += "</tbody></table>";
+    contenedor.innerHTML = tablaHTML;
+}
 
 
 
