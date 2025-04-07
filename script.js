@@ -538,3 +538,83 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//logica para mostrar boton si el usuario esta logueado
+document.addEventListener("DOMContentLoaded", () => {
+    // Verificamos si el usuario está logueado con localStorage
+    const userId = localStorage.getItem("userId"); // Asegurate de guardar esto en login
+    if (userId) {
+      document.getElementById("navReservas").classList.remove("d-none");
+    }
+
+    // Al hacer clic en "Mis reservas"
+    document.getElementById("btnReservas").addEventListener("click", async (e) => {
+      e.preventDefault(); // Evita navegación
+
+      // Traer las reservas del usuario logueado
+      const response = await fetch("/mis-reservas");
+      const reservas = await response.json();
+
+      // Crear tabla y mostrarla (podés colocarlo en una sección o modal si querés)
+      let tablaHTML = `
+        <div class="container mt-4">
+          <h4>Mis Reservas</h4>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th><th>Tipo</th><th>Inicio</th><th>Fin</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      reservas.forEach(r => {
+        tablaHTML += `
+          <tr>
+            <td>${r.id}</td>
+            <td>${r.tipo}</td>
+            <td>${r.fecha_inicio}</td>
+            <td>${r.fecha_fin}</td>
+            <td>${r.estado}</td>
+          </tr>
+        `;
+      });
+
+      tablaHTML += `</tbody></table></div>`;
+      document.body.insertAdjacentHTML("beforeend", tablaHTML);
+    });
+  });
+
+
+
+
+
+
+
