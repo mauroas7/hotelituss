@@ -538,5 +538,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const telefonoInput = document.getElementById('userTelefono');
+    
+    if (telefonoInput) {
+      // Validar mientras el usuario escribe
+      telefonoInput.addEventListener('input', function(e) {
+        // Reemplazar cualquier carácter que no sea número
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+      
+      // Validar antes de enviar el formulario
+      const form = document.getElementById('createUserForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const telefonoValue = telefonoInput.value;
+          
+          // Verificar si contiene solo números
+          if (!/^[0-9]+$/.test(telefonoValue)) {
+            e.preventDefault();
+            alert('Por favor, ingrese solo números en el campo de teléfono.');
+            telefonoInput.focus();
+          }
+        });
+      }
+    }
+  });
+</script>
 
