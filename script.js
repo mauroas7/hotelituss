@@ -32,6 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Detectar scroll para cambiar estilo de navbar
   handleNavbarScroll()
+
+  // Configurar validación de campos específicos
+  setupFieldValidation()
+
+  // Gestión de sesión de usuario
+  setupUserSession()
+  
+  // Configurar funcionalidad de código de verificación
+  setupVerificationCode()
 })
 
 /**
@@ -271,6 +280,63 @@ function setupFormValidation() {
       false,
     )
   })
+
+  // Validación específica para el formulario de creación de usuario
+  const createUserForm = document.getElementById("createUserForm")
+  if (createUserForm) {
+    createUserForm.addEventListener("submit", function (event) {
+      event.preventDefault()
+      
+      // Check if the form is valid
+      if (this.checkValidity()) {
+        // Get form data
+        const formData = {
+          nombre: document.getElementById("userName").value,
+          correo: document.getElementById("userEmail").value,
+          telefono: document.getElementById("userTelefono").value,
+          password: document.getElementById("userPassword").value
+        }
+        
+        // Send data to backend
+        sendVerificationCode(formData)
+      }
+      
+      this.classList.add("was-validated")
+    })
+  }
+}
+
+/**
+ * Configura la validación de campos específicos (nombre y teléfono)
+ */
+function setupFieldValidation() {
+  // Validación para el campo de nombre (solo letras)
+  const nombreInput = document.getElementById("userName")
+  if (nombreInput) {
+    // Añadir atributos de validación
+    nombreInput.setAttribute("pattern", "[A-Za-zÁáÉéÍíÓóÚúÑñs]+")
+    nombreInput.setAttribute("title", "Por favor ingrese solo letras")
+
+    // Validar mientras el usuario escribe
+    nombreInput.addEventListener("input", function () {
+      // Permitir letras, espacios y caracteres acentuados
+      this.value = this.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ\s]/g, "")
+    })
+  }
+
+  // Validación para el campo de teléfono (solo números)
+  const telefonoInput = document.getElementById("userTelefono")
+  if (telefonoInput) {
+    // Añadir atributos de validación
+    telefonoInput.setAttribute("pattern", "[0-9]+")
+    telefonoInput.setAttribute("title", "Por favor ingrese solo números")
+
+    // Validar mientras el usuario escribe
+    telefonoInput.addEventListener("input", function () {
+      // Permitir solo números
+      this.value = this.value.replace(/[^0-9]/g, "")
+    })
+  }
 }
 
 /**
@@ -438,6 +504,234 @@ function updateActiveNavLink() {
   }
 }
 
+/**
+ * Configura la gestión de sesión de usuario
+ */
+function setupUserSession() {
+  const loginLink = document.getElementById("loginLink")
+  const createUserLink = document.getElementById("createUserLink")
+  const logoutBtn = document.getElementById("logoutBtn")
+
+  // Detectar si viene de un login exitoso con ?logged=true
+  const urlParams = new URLSearchParams(window.location.search)
+  const loggedIn = urlParams.get("logged")
+
+  if (loggedIn === "true") {
+    localStorage.setItem("userLoggedIn", "true")
+    window.history.replaceState({}, document.title, "/") // Limpiar la URL
+  }
+
+  // Mostrar u ocultar botones según estado
+  const isLogged = localStorage.getItem("userLoggedIn") === "true"
+
+  if (isLogged) {
+    if (loginLink) loginLink.style.display = "none"
+    if (createUserLink) createUserLink.style.display = "none"
+    if (logoutBtn) logoutBtn.style.display = "inline-block"
+  } else {
+    if (logoutBtn) logoutBtn.style.display = "none"
+  }
+
+  // Función para cerrar sesión
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("userLoggedIn")
+      window.location.reload() // Refresca la página
+    })
+  }
+}
+
+/**
+ * Configura la funcionalidad de entrada del código de verificación
+ */
+function setupVerificationCode() {
+  const verificationInputs = document.querySelectorAll('.verification-input');
+  
+  if (verificationInputs.length > 0) {
+    // Auto-focus next input when a digit is entered
+    verificationInputs.forEach((input, index) => {
+      input.addEventListener('input', function() {
+        if (this.value.length === 1) {
+          if (index < verificationInputs.length - 1) {
+            verificationInputs[index + 1].focus();
+          }
+        }
+      });
+      
+      // Handle backspace to go to previous input
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && index > 0) {
+          verificationInputs[index - 1].focus();
+        }
+      });
+    });
+  }
+  
+  // Handle verification form submission
+  const verificationForm = document.getElementById('verificationForm');
+  if (verificationForm) {
+    verificationForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get the code from all inputs
+      let code = '';
+      verificationInputs.forEach(input => {
+        code += input.value;
+      });
+      
+      // Get the email from the stored data
+      const userEmail = localStorage.getItem('pendingVerificationEmail');
+      
+      if (code.length === 6 && userEmail) {
+        verifyCode(userEmail, code);
+      } else {
+        document.getElementById('verification-error').style.display = 'block';
+      }
+    });
+  }
+  
+  // Handle resend code button
+  const resendCodeBtn = document.getElementById('resendCode');
+  if (resendCodeBtn) {
+    resendCodeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Get the stored user data
+      const userData = JSON.parse(localStorage.getItem('pendingUserData'));
+      
+      if (userData) {
+        // Disable the button and show countdown
+        this.style.pointerEvents = 'none';
+        this.style.opacity = '0.5';
+        
+        const countdownEl = document.getElementById('countdown');
+        countdownEl.style.display = 'block';
+        
+        let seconds = 60;
+        countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`;
+        
+        const countdownInterval = setInterval(() => {
+          seconds--;
+          countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`;
+          
+          if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            this.style.pointerEvents = 'auto';
+            this.style.opacity = '1';
+            countdownEl.style.display = 'none';
+          }
+        }, 1000);
+        
+        // Resend the verification code
+        sendVerificationCode(userData);
+      }
+    });
+  }
+}
+
+/**
+ * Envía el código de verificación al correo electrónico del usuario
+ * @param {Object} userData - Datos del usuario incluyendo nombre, correo, teléfono y contraseña
+ */
+function sendVerificationCode(userData) {
+  // Backend URL
+  const backendBaseUrl = "https://hotelitus.onrender.com";
+  
+  // Store user data for later use
+  localStorage.setItem('pendingUserData', JSON.stringify(userData));
+  localStorage.setItem('pendingVerificationEmail', userData.correo);
+  
+  // Send request to backend
+  fetch(`${backendBaseUrl}/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success) {
+        // Show verification modal
+        if (typeof bootstrap !== "undefined") {
+          // Hide create user modal if it's open
+          const createUserModal = bootstrap.Modal.getInstance(document.getElementById("createUserModal"));
+          if (createUserModal) {
+            createUserModal.hide();
+          }
+          
+          // Show verification modal
+          setTimeout(() => {
+            const verificationModal = new bootstrap.Modal(document.getElementById("verificationModal"));
+            verificationModal.show();
+            
+            // Focus on first input
+            document.querySelector('.verification-input').focus();
+          }, 500);
+        }
+      } else {
+        alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error al enviar datos:", error);
+      alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.");
+    });
+}
+
+/**
+ * Verifica el código ingresado por el usuario
+ * @param {string} email - Correo electrónico del usuario
+ * @param {string} code - Código de verificación ingresado por el usuario
+ */
+function verifyCode(email, code) {
+  // Backend URL
+  const backendBaseUrl = "https://hotelitus.onrender.com";
+  
+  // Send verification request
+  fetch(`${backendBaseUrl}/verify-code`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ correo: email, codigo: code }),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success) {
+        // Hide verification modal
+        if (typeof bootstrap !== "undefined") {
+          const verificationModal = bootstrap.Modal.getInstance(document.getElementById("verificationModal"));
+          if (verificationModal) {
+            verificationModal.hide();
+          }
+        }
+        
+        // Clear stored data
+        localStorage.removeItem('pendingUserData');
+        localStorage.removeItem('pendingVerificationEmail');
+        
+        // Show success message and redirect to login
+        alert("¡Cuenta creada con éxito! Ahora puede iniciar sesión.");
+        
+        // Show login modal
+        setTimeout(() => {
+          if (typeof bootstrap !== "undefined") {
+            const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+            loginModal.show();
+          }
+        }, 500);
+      } else {
+        // Show error message
+        document.getElementById('verification-error').style.display = 'block';
+      }
+    })
+    .catch((error) => {
+      console.error("Error al verificar código:", error);
+      document.getElementById('verification-error').style.display = 'block';
+    });
+}
+
 // URL base del backend en Render
 const backendBaseUrl = "https://hotelitus.onrender.com"
 
@@ -503,38 +797,55 @@ function deleteReserva(id) {
     })
 }
 
-// Gestión de sesión de usuario
+// Implementación mejorada del inicio de sesión con manejo de errores
 document.addEventListener("DOMContentLoaded", () => {
-  const loginLink = document.getElementById("loginLink")
-  const createUserLink = document.getElementById("createUserLink")
-  const logoutBtn = document.getElementById("logoutBtn")
+  const loginForm = document.getElementById("loginForm")
 
-  // Detectar si viene de un login exitoso con ?logged=true
-  const urlParams = new URLSearchParams(window.location.search)
-  const loggedIn = urlParams.get("logged")
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault()
 
-  if (loggedIn === "true") {
-    localStorage.setItem("userLoggedIn", "true")
-    window.history.replaceState({}, document.title, "/") // Limpiar la URL
-  }
+      // Mostrar indicador de carga
+      const submitBtn = this.querySelector('button[type="submit"]')
+      const originalBtnText = submitBtn.innerHTML
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'
+      submitBtn.disabled = true
 
-  // Mostrar u ocultar botones según estado
-  const isLogged = localStorage.getItem("userLoggedIn") === "true"
+      // Ocultar mensajes de error previos
+      const errorMsg = document.getElementById("loginErrorMsg")
+      errorMsg.classList.add("d-none")
 
-  if (isLogged) {
-    if (loginLink) loginLink.style.display = "none"
-    if (createUserLink) createUserLink.style.display = "none"
-    if (logoutBtn) logoutBtn.style.display = "inline-block"
-  } else {
-    if (logoutBtn) logoutBtn.style.display = "none"
-  }
+      // Obtener datos del formulario
+      const email = document.getElementById("loginEmail").value
+      const password = document.getElementById("loginPassword").value
 
-  // Función para cerrar sesión
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("userLoggedIn")
-      window.location.reload() // Refresca la página
+      // Usar XMLHttpRequest en lugar de fetch para mejor compatibilidad
+      const xhr = new XMLHttpRequest()
+      xhr.open("POST", "https://hotelitus.onrender.com/sesion", true)
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          // Restaurar botón
+          submitBtn.innerHTML = originalBtnText
+          submitBtn.disabled = false
+
+          console.log("Status:", xhr.status)
+          console.log("Response:", xhr.responseText)
+
+          if (xhr.status === 200) {
+            // Éxito - guardar estado de sesión y redirigir
+            localStorage.setItem("userLoggedIn", "true")
+            window.location.href = "https://hotelituss1.vercel.app/?logged=true"
+          } else {
+            // Mostrar mensaje de error
+            errorMsg.classList.remove("d-none")
+            errorMsg.textContent = "Error al iniciar sesión. Por favor, verifica tus credenciales."
+          }
+        }
+      }
+
+      // Enviar datos en formato de formulario
+      xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
     })
   }
 })
-
