@@ -849,3 +849,26 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
+  const mp = new MercadoPago("APP_USR-9c39d3b1-97db-48d0-99f4-1d91c7491ca9"); // reemplazá esto con tu clave pública de prueba
+
+    document.getElementById("pagarBtn").addEventListener("click", () => {
+      fetch("http://localhost:3000/crear-preferencia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombreProducto: "Reserva habitación doble",
+          precio: 350,
+          cantidad: 1
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        mp.checkout({
+          preference: {
+            id: data.id
+          },
+          autoOpen: true,
+        });
+      });
+    });
