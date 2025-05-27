@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Gestión de sesión de usuario
   setupUserSession()
-  
+
   // Configurar funcionalidad de código de verificación
   setupVerificationCode()
 })
@@ -286,7 +286,7 @@ function setupFormValidation() {
   if (createUserForm) {
     createUserForm.addEventListener("submit", function (event) {
       event.preventDefault()
-      
+
       // Check if the form is valid
       if (this.checkValidity()) {
         // Get form data
@@ -294,13 +294,13 @@ function setupFormValidation() {
           nombre: document.getElementById("userName").value,
           correo: document.getElementById("userEmail").value,
           telefono: document.getElementById("userTelefono").value,
-          password: document.getElementById("userPassword").value
+          password: document.getElementById("userPassword").value,
         }
-        
+
         // Send data to backend
         sendVerificationCode(formData)
       }
-      
+
       this.classList.add("was-validated")
     })
   }
@@ -545,87 +545,87 @@ function setupUserSession() {
  * Configura la funcionalidad de entrada del código de verificación
  */
 function setupVerificationCode() {
-  const verificationInputs = document.querySelectorAll('.verification-input');
-  
+  const verificationInputs = document.querySelectorAll(".verification-input")
+
   if (verificationInputs.length > 0) {
     // Auto-focus next input when a digit is entered
     verificationInputs.forEach((input, index) => {
-      input.addEventListener('input', function() {
+      input.addEventListener("input", function () {
         if (this.value.length === 1) {
           if (index < verificationInputs.length - 1) {
-            verificationInputs[index + 1].focus();
+            verificationInputs[index + 1].focus()
           }
         }
-      });
-      
+      })
+
       // Handle backspace to go to previous input
-      input.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace' && !this.value && index > 0) {
-          verificationInputs[index - 1].focus();
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Backspace" && !this.value && index > 0) {
+          verificationInputs[index - 1].focus()
         }
-      });
-    });
+      })
+    })
   }
-  
+
   // Handle verification form submission
-  const verificationForm = document.getElementById('verificationForm');
+  const verificationForm = document.getElementById("verificationForm")
   if (verificationForm) {
-    verificationForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
+    verificationForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+
       // Get the code from all inputs
-      let code = '';
-      verificationInputs.forEach(input => {
-        code += input.value;
-      });
-      
+      let code = ""
+      verificationInputs.forEach((input) => {
+        code += input.value
+      })
+
       // Get the email from the stored data
-      const userEmail = localStorage.getItem('pendingVerificationEmail');
-      
+      const userEmail = localStorage.getItem("pendingVerificationEmail")
+
       if (code.length === 6 && userEmail) {
-        verifyCode(userEmail, code);
+        verifyCode(userEmail, code)
       } else {
-        document.getElementById('verification-error').style.display = 'block';
+        document.getElementById("verification-error").style.display = "block"
       }
-    });
+    })
   }
-  
+
   // Handle resend code button
-  const resendCodeBtn = document.getElementById('resendCode');
+  const resendCodeBtn = document.getElementById("resendCode")
   if (resendCodeBtn) {
-    resendCodeBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
+    resendCodeBtn.addEventListener("click", function (e) {
+      e.preventDefault()
+
       // Get the stored user data
-      const userData = JSON.parse(localStorage.getItem('pendingUserData'));
-      
+      const userData = JSON.parse(localStorage.getItem("pendingUserData"))
+
       if (userData) {
         // Disable the button and show countdown
-        this.style.pointerEvents = 'none';
-        this.style.opacity = '0.5';
-        
-        const countdownEl = document.getElementById('countdown');
-        countdownEl.style.display = 'block';
-        
-        let seconds = 60;
-        countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`;
-        
+        this.style.pointerEvents = "none"
+        this.style.opacity = "0.5"
+
+        const countdownEl = document.getElementById("countdown")
+        countdownEl.style.display = "block"
+
+        let seconds = 60
+        countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`
+
         const countdownInterval = setInterval(() => {
-          seconds--;
-          countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`;
-          
+          seconds--
+          countdownEl.textContent = `Podrás solicitar un nuevo código en ${seconds} segundos`
+
           if (seconds <= 0) {
-            clearInterval(countdownInterval);
-            this.style.pointerEvents = 'auto';
-            this.style.opacity = '1';
-            countdownEl.style.display = 'none';
+            clearInterval(countdownInterval)
+            this.style.pointerEvents = "auto"
+            this.style.opacity = "1"
+            countdownEl.style.display = "none"
           }
-        }, 1000);
-        
+        }, 1000)
+
         // Resend the verification code
-        sendVerificationCode(userData);
+        sendVerificationCode(userData)
       }
-    });
+    })
   }
 }
 
@@ -635,12 +635,12 @@ function setupVerificationCode() {
  */
 function sendVerificationCode(userData) {
   // Backend URL
-  const backendBaseUrl = "https://hotelitus.onrender.com";
-  
+  const backendBaseUrl = "https://hotelitus.onrender.com"
+
   // Store user data for later use
-  localStorage.setItem('pendingUserData', JSON.stringify(userData));
-  localStorage.setItem('pendingVerificationEmail', userData.correo);
-  
+  localStorage.setItem("pendingUserData", JSON.stringify(userData))
+  localStorage.setItem("pendingVerificationEmail", userData.correo)
+
   // Send request to backend
   fetch(`${backendBaseUrl}/create`, {
     method: "POST",
@@ -655,28 +655,28 @@ function sendVerificationCode(userData) {
         // Show verification modal
         if (typeof bootstrap !== "undefined") {
           // Hide create user modal if it's open
-          const createUserModal = bootstrap.Modal.getInstance(document.getElementById("createUserModal"));
+          const createUserModal = bootstrap.Modal.getInstance(document.getElementById("createUserModal"))
           if (createUserModal) {
-            createUserModal.hide();
+            createUserModal.hide()
           }
-          
+
           // Show verification modal
           setTimeout(() => {
-            const verificationModal = new bootstrap.Modal(document.getElementById("verificationModal"));
-            verificationModal.show();
-            
+            const verificationModal = new bootstrap.Modal(document.getElementById("verificationModal"))
+            verificationModal.show()
+
             // Focus on first input
-            document.querySelector('.verification-input').focus();
-          }, 500);
+            document.querySelector(".verification-input").focus()
+          }, 500)
         }
       } else {
-        alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.");
+        alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.")
       }
     })
     .catch((error) => {
-      console.error("Error al enviar datos:", error);
-      alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.");
-    });
+      console.error("Error al enviar datos:", error)
+      alert("Error al enviar el código de verificación. Por favor, inténtelo de nuevo.")
+    })
 }
 
 /**
@@ -685,10 +685,8 @@ function sendVerificationCode(userData) {
  * @param {string} code - Código de verificación ingresado por el usuario
  */
 function verifyCode(email, code) {
-  // Backend URL
-  const backendBaseUrl = "https://hotelitus.onrender.com";
-  
-  // Send verification request
+  const backendBaseUrl = "https://hotelitus.onrender.com"
+
   fetch(`${backendBaseUrl}/verify-code`, {
     method: "POST",
     headers: {
@@ -701,35 +699,32 @@ function verifyCode(email, code) {
       if (result.success) {
         // Hide verification modal
         if (typeof bootstrap !== "undefined") {
-          const verificationModal = bootstrap.Modal.getInstance(document.getElementById("verificationModal"));
+          const verificationModal = bootstrap.Modal.getInstance(document.getElementById("verificationModal"))
           if (verificationModal) {
-            verificationModal.hide();
+            verificationModal.hide()
           }
         }
-        
+
         // Clear stored data
-        localStorage.removeItem('pendingUserData');
-        localStorage.removeItem('pendingVerificationEmail');
-        
-        // Show success message and redirect to login
-        alert("¡Cuenta creada con éxito! Ahora puede iniciar sesión.");
-        
-        // Show login modal
+        localStorage.removeItem("pendingUserData")
+        localStorage.removeItem("pendingVerificationEmail")
+
+        // CAMBIAR ESTAS LÍNEAS:
+        alert("¡Cuenta creada con éxito! Será redirigido para iniciar sesión.")
+
+        // Redirigir a página B con parámetro para mostrar login
         setTimeout(() => {
-          if (typeof bootstrap !== "undefined") {
-            const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
-            loginModal.show();
-          }
-        }, 500);
+          window.location.href = "https://hotelituss-test.vercel.app/?showLogin=true"
+        }, 1000)
       } else {
         // Show error message
-        document.getElementById('verification-error').style.display = 'block';
+        document.getElementById("verification-error").style.display = "block"
       }
     })
     .catch((error) => {
-      console.error("Error al verificar código:", error);
-      document.getElementById('verification-error').style.display = 'block';
-    });
+      console.error("Error al verificar código:", error)
+      document.getElementById("verification-error").style.display = "block"
+    })
 }
 
 // URL base del backend en Render
@@ -819,33 +814,46 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("loginEmail").value
       const password = document.getElementById("loginPassword").value
 
-      // Usar XMLHttpRequest en lugar de fetch para mejor compatibilidad
-      const xhr = new XMLHttpRequest()
-      xhr.open("POST", "https://hotelitus.onrender.com/sesion", true)
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          // Restaurar botón
+      // CAMBIAR DE XMLHttpRequest A FETCH:
+      fetch("https://hotelitus.onrender.com/sesion", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
           submitBtn.innerHTML = originalBtnText
           submitBtn.disabled = false
 
-          console.log("Status:", xhr.status)
-          console.log("Response:", xhr.responseText)
-
-          if (xhr.status === 200) {
-            // Éxito - guardar estado de sesión y redirigir
+          if (data.success) {
+            // Guardar estado de sesión
             localStorage.setItem("userLoggedIn", "true")
-            window.location.href = "https://hotelituss1.vercel.app/?logged=true"
-          } else {
-            // Mostrar mensaje de error
-            errorMsg.classList.remove("d-none")
-            errorMsg.textContent = "Error al iniciar sesión. Por favor, verifica tus credenciales."
-          }
-        }
-      }
+            localStorage.setItem("currentUserEmail", email)
 
-      // Enviar datos en formato de formulario
-      xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+            // Guardar datos del usuario
+            if (data.user) {
+              localStorage.setItem("currentUserData", JSON.stringify(data.user))
+            }
+
+            // REDIRIGIR A PÁGINA B
+            window.location.href = "https://hotelituss-test.vercel.app/?logged=true"
+          } else {
+            errorMsg.classList.remove("d-none")
+            errorMsg.textContent = data.message || "Credenciales incorrectas"
+          }
+        })
+        .catch((error) => {
+          console.error("Error al iniciar sesión:", error)
+          submitBtn.innerHTML = originalBtnText
+          submitBtn.disabled = false
+          errorMsg.textContent = "Error al conectar con el servidor. Intente nuevamente."
+          errorMsg.classList.remove("d-none")
+        })
     })
   }
 })
