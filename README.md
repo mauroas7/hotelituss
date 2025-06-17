@@ -96,7 +96,8 @@ Ejecutar la aplicación: Simplemente abre el archivo index.html en tu navegador 
 
 ¡Listo! Con estos pasos, el sistema completo debería estar funcionando en tu máquina local.
 
-Autores
-Front-End Development: Mauro Astudillo (@mauroas7)
-Back-End Development: Stefano Ferro (@Stefaneush)
-Base de Datos: Moro Giuliano (@helGmoro)
+### Autores
+
+* **Front-End Development:** Mauro Astudillo ([@mauroas7](https://github.com/mauroas7))
+* **Back-End Development:** Stefano Ferro ([@Stefaneush](https://github.com/Stefaneush))
+* **Base de Datos:** Moro Giuliano ([@helGmoro](https://github.com/helGmoro))
