@@ -52,37 +52,45 @@ Crea una carpeta principal para contener ambos proyectos.
 ```bash
 mkdir Hotelituss-Project
 cd Hotelituss-Project
-
+```
 
 Paso 2: Configurar el Back-End
 Clonar el repositorio del Back-End:
-Bash
 
+```bash
 git clone [https://github.com/Stefaneush/Despliegue-de-Pagina.git](https://github.com/Stefaneush/Despliegue-de-Pagina.git)
+```
 Navegar a la carpeta del Back-End:
-Bash
 
+```bash
 cd Despliegue-de-Pagina
 Instalar dependencias (si aplica): Si tu proyecto tiene un archivo package.json, ejecuta este comando. De lo contrario, puedes omitir este paso.
-Bash
+```
 
+```bash
 npm install
+```
+```bash
 Ejecutar el servidor del Back-End: Revisa tu archivo package.json o tu archivo principal (ej. server.js, index.js) para el comando correcto.
-Bash
-
+```
+```bash
 npm start
+```
 # O podrías necesitar ejecutar: node index.js
 Una vez ejecutado, el servidor estará escuchando peticiones. ¡No cierres esta terminal!
 Paso 3: Configurar el Front-End
 Abre una nueva terminal y vuelve a la carpeta principal Hotelituss-Project.
 
 Clonar el repositorio del Front-End:
-Bash
 
+```bash
 git clone [https://github.com/mauroas7/hotelituss.git](https://github.com/mauroas7/hotelituss.git)
+```
 Navegar a la carpeta del Front-End:
-Bash
 
+```bash
 cd hotelituss
+```
+
 Ejecutar la aplicación: Simplemente abre el archivo index.html en tu navegador web. La interfaz de usuario debería cargarse y ser capaz de comunicarse con el Back-End que dejaste corriendo en la otra terminal.
 ¡Listo! Con estos pasos, el sistema completo debería estar funcionando en tu máquina local.
