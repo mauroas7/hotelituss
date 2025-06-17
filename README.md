@@ -95,3 +95,8 @@ cd hotelituss
 Ejecutar la aplicación: Simplemente abre el archivo index.html en tu navegador web. La interfaz de usuario debería cargarse y ser capaz de comunicarse con el Back-End que dejaste corriendo en la otra terminal.
 
 ¡Listo! Con estos pasos, el sistema completo debería estar funcionando en tu máquina local.
+
+Autores
+Front-End Development: Mauro Astudillo (@mauroas7)
+Back-End Development: Stefano Ferro (@Stefaneush)
+Base de Datos: Moro Giuliano (@helGmoro)
